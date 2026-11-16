@@ -779,7 +779,7 @@ function App() {
 
   const statusDark=(screen==="detail"||screen==="coming-soon")&&selectedTour;
   const statusCity=screen==="city-tours"&&selectedCity;
-  const statusBg=statusDark?`linear-gradient(135deg,${selectedTour.color[0]},${selectedTour.color[1]})`:statusCity?`linear-gradient(135deg,${selectedCity.color[0]},${selectedCity.color[1]})`:"#fff";
+  const statusBg=statusDark?`linear-gradient(135deg,${selectedTour.color[0]},${selectedTour.color[1]})`:statusCity?`linear-gradient(135deg,${selectedCity.color[0]},${selectedCity.color[1]})`:"linear-gradient(135deg,#1a2f4a,#2d6a9f)";
   const statusColor=(statusDark||statusCity)?"#fff":"#000";
   const showTabs=screen==="cities"||screen==="profile";
 
