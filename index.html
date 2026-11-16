@@ -786,11 +786,7 @@ function App() {
   return (
     <div className="app-outer">
       <div className="phone-frame">
-        <div style={{background:statusBg,padding:"14px 24px 10px",display:"flex",justifyContent:"space-between",alignItems:"center",flexShrink:0}}>
-          <span style={{fontSize:13,fontWeight:600,color:statusColor}}>9:41</span>
-          <div style={{width:110,height:22,background:(statusDark||statusCity)?"rgba(0,0,0,.3)":"#000",borderRadius:12}}/>
-          <span style={{fontSize:12,color:statusColor}}>●●● 5G</span>
-        </div>
+        <div style={{background:statusBg,height:"env(safe-area-inset-top, 0px)",flexShrink:0}}/>
         <div style={{flex:1,overflow:"hidden",position:"relative"}}>
           {screen==="coming-soon"&&selectedTour
             ?<ComingSoonScreen tour={selectedTour} lang={lang} onBack={goBackFromPlayer}/>
