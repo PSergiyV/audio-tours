@@ -24,6 +24,7 @@
     .phone-frame { width: 100% !important; height: 100dvh !important; max-height: none !important; border-radius: 0 !important; box-shadow: none !important; }
   }
 </style>
+<script data-goatcounter="https://audiotours-ua.goatcounter.com/count" data-goatcounter-settings='{"no_onload":true,"allow_local":false}' async src="https://gc.zgo.at/count.js"></script>
 </head>
 <body>
 <div id="root"></div>
@@ -704,6 +705,37 @@ const CITIES = [{
   cover: "img/69.jpg"
 }];
 const FREE_SECONDS = 60;
+const _gcQueue = [];
+function track(path, title) {
+  const send = () => {
+    try {
+      window.goatcounter.count({
+        path: path,
+        title: title,
+        event: true
+      });
+    } catch (e) {}
+  };
+  if (window.goatcounter && window.goatcounter.count) send();else {
+    _gcQueue.push(send);
+    if (_gcQueue.length === 1) {
+      const t = setInterval(() => {
+        if (window.goatcounter && window.goatcounter.count) {
+          clearInterval(t);
+          while (_gcQueue.length) _gcQueue.shift()();
+        }
+      }, 500);
+      setTimeout(() => clearInterval(t), 20000);
+    }
+  }
+}
+function tourTitle(id) {
+  try {
+    return TOUR_CONTENT.uk[id].title;
+  } catch (e) {
+    return "Екскурсія " + id;
+  }
+}
 const TOUR_AUDIO = {
   4: "lviv-mistychnyi.mp3",
   5: "lviv-rizdvianyi.mp3",
@@ -1296,6 +1328,13 @@ function PlayerScreen({
   purchasedRef.current = purchased;
   const ratedRef = useRef(userRating);
   ratedRef.current = userRating;
+  const playedRef = useRef(false);
+  useEffect(() => {
+    if (playing && !playedRef.current) {
+      playedRef.current = true;
+      track("slukhaiut/" + tour.id, "Почали слухати: " + tourTitle(tour.id));
+    }
+  }, [playing]);
   useEffect(() => {
     const a = audioRef.current;
     if (!a) return;
@@ -1329,6 +1368,7 @@ function PlayerScreen({
   const progress = time / dur;
   const freeRatio = FREE_SECONDS / dur;
   function handleBuy() {
+    track("kupyty/" + tour.id, "Натиснули «Придбати»: " + tourTitle(tour.id));
     setBuying(true);
     setTimeout(() => {
       setBuying(false);
@@ -2462,7 +2502,11 @@ function App() {
   function openCity(city) {
     setSelectedCity(city);
     setScreen("city-tours");
+    track("misto/" + city.key, "Місто: " + city.key);
   }
+  React.useEffect(() => {
+    track("vidkryto-dodatok", "Відкрили додаток");
+  }, []);
   const dbRef = React.useRef(null);
   React.useEffect(() => {
     (async () => {
@@ -2475,6 +2519,7 @@ function App() {
   function openTour(tour) {
     setSelectedTour(tour);
     setScreen(tour.comingSoon ? "coming-soon" : "detail");
+    track("ekskursiia/" + tour.id, (tour.comingSoon ? "Скоро: " : "Екскурсія: ") + tourTitle(tour.id) + " (" + tour.city + ")");
     try {
       if (dbRef.current) {
         const date = new Date().toISOString().slice(0, 10);
