@@ -1713,13 +1713,10 @@ function PlayerScreen({
       flexShrink: 0,
       textAlign: "right"
     }
-  }, React.createElement(Stars, {
-    rating: tour.rating,
-    size: 11
-  }), userRating > 0 && React.createElement("div", {
+  }, userRating > 0 && React.createElement("div", {
     style: {
       color: "#f1c40f",
-      fontSize: 10
+      fontSize: 12
     }
   }, "★".repeat(userRating)))) : React.createElement("div", {
     style: {
@@ -1768,18 +1765,10 @@ function PlayerScreen({
       flexShrink: 0,
       textAlign: "right"
     }
-  }, React.createElement(Stars, {
-    rating: tour.rating,
-    size: 11
-  }), React.createElement("div", {
-    style: {
-      color: "rgba(255,255,255,.7)",
-      fontSize: 10
-    }
-  }, tour.rating, " \xB7 ", tour.reviews, " ", tr(lang, "reviews")), userRating > 0 && React.createElement("div", {
+  }, userRating > 0 && React.createElement("div", {
     style: {
       color: "#f1c40f",
-      fontSize: 10
+      fontSize: 12
     }
   }, "★".repeat(userRating))))), React.createElement("div", {
     style: {
@@ -2340,18 +2329,18 @@ function CityToursScreen({
         textTransform: "uppercase",
         letterSpacing: .8
       }
-    }, tour.category), React.createElement("span", {
+    }, tour.category), myRating ? React.createElement("span", {
       style: {
         fontSize: 12
       }
     }, React.createElement(Stars, {
-      rating: myRating || tour.rating
-    }), " ", (myRating || tour.rating).toFixed(1), myRating && React.createElement("span", {
+      rating: myRating
+    }), " ", React.createElement("span", {
       style: {
         color: "#f1c40f",
         fontSize: 10
       }
-    }, " ", tr(lang, "yours")))), React.createElement("div", {
+    }, tr(lang, "yours"))) : null), React.createElement("div", {
       style: {
         fontWeight: 700,
         fontSize: 18,
