@@ -689,7 +689,7 @@ const TOURS_BASE = [{
   comingSoon: true,
   cover: "img/69.jpg"
 }];
-const CITIES = [{
+const CITIES_ALL = [{
   key: "Львів",
   icon: "🦁",
   color: ["#7a3a10", "#c0392b"],
@@ -700,14 +700,17 @@ const CITIES = [{
   icon: "🏛️",
   color: ["#154360", "#7d3c98"],
   count: 2,
-  cover: "img/71.jpg"
+  cover: "img/71.jpg",
+  hidden: true
 }, {
   key: "Одеса",
   icon: "⚓",
   color: ["#0d2137", "#1a4a7a"],
   count: 2,
-  cover: "img/69.jpg"
+  cover: "img/69.jpg",
+  hidden: true
 }];
+const CITIES = CITIES_ALL.filter(c => !c.hidden);
 const FREE_SECONDS = 60;
 const TOUR_ROUTES = {
   4: [{
@@ -2738,7 +2741,7 @@ function ContactScreen() {
       overflow: "hidden",
       boxShadow: "0 1px 8px rgba(0,0,0,.05)"
     }
-  }, row("📄", "Договір оферти", "Умови придбання екскурсій", "oferta.html#oferta"), row("↩️", "Повернення коштів", "Коли і як повернути оплату", "oferta.html#povernennia"), row("🏷️", "Контакти та реквізити", "ФОП Поздняков Сергій Васильович", "oferta.html#kontakty")), React.createElement("div", {
+  }, row("🛒", "Каталог і ціни", "Усі екскурсії, описи та вартість", "oferta.html#katalog"), row("📄", "Договір оферти", "Умови придбання екскурсій", "oferta.html#oferta"), row("↩️", "Обмін і повернення", "Умови обміну та повернення коштів", "oferta.html#povernennia"), row("🏷️", "Контакти та реквізити", "ФОП Поздняков Сергій Васильович", "oferta.html#kontakty")), React.createElement("div", {
     style: {
       textAlign: "center",
       color: "#bbb",
@@ -3065,15 +3068,27 @@ function App() {
       }
     }, React.createElement("span", {
       style: {
-        fontSize: 24
+        display: "flex",
+        alignItems: "center",
+        gap: 6,
+        background: "linear-gradient(135deg,#1a2f4a,#2d6a9f)",
+        color: "#fff",
+        borderRadius: 20,
+        padding: "7px 16px",
+        boxShadow: "0 3px 10px rgba(45,106,159,.35)",
+        outline: screen === "contact" ? "2px solid #e67e22" : "none",
+        outlineOffset: 2
+      }
+    }, React.createElement("span", {
+      style: {
+        fontSize: 17
       }
     }, "\u2709\uFE0F"), React.createElement("span", {
       style: {
-        fontSize: 11,
-        color: screen === "contact" ? "#e67e22" : "#aaa",
-        fontWeight: screen === "contact" ? 600 : 400
+        fontSize: 13,
+        fontWeight: 700
       }
-    }, tr(lang, "contactTab"))));
+    }, tr(lang, "contactTab")))));
     acc.push(el);
     return acc;
   }, []))));
