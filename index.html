@@ -17,15 +17,15 @@
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
   @keyframes spin { to { transform: rotate(360deg); } }
-  .app-outer { height: 100dvh; background: linear-gradient(135deg,#1a2f4a,#2d6a9f); display: flex; justify-content: center; }
-  .phone-frame { width: 430px; max-width: 100%; height: 100dvh; background: #f7f7f9; overflow: hidden; box-shadow: 0 0 60px rgba(0,0,0,.35); position: relative; display: flex; flex-direction: column; }
+  .app-outer { height: 100dvh; background: #1a1a2e; display: flex; align-items: center; justify-content: center; padding: 20px 0; }
+  .phone-frame { width: 390px; height: min(844px, calc(100dvh - 40px)); background: #f7f7f9; border-radius: 44px; overflow: hidden; box-shadow: 0 32px 80px rgba(0,0,0,.6), 0 0 0 8px #222, 0 0 0 10px #333; position: relative; display: flex; flex-direction: column; }
   @media (min-width: 431px) {
-    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-thumb { background: #c4cad4; border-radius: 4px; }
   }
   @media (max-width: 430px) {
-    .app-outer { background: #f7f7f9; }
-    .phone-frame { width: 100% !important; box-shadow: none !important; }
+    .app-outer { background: #f7f7f9; padding: 0; }
+    .phone-frame { width: 100% !important; height: 100dvh !important; border-radius: 0 !important; box-shadow: none !important; }
   }
 </style>
 <script data-goatcounter="https://audiotours-ua.goatcounter.com/count" data-goatcounter-settings='{"no_onload":true,"allow_local":false}' async src="https://gc.zgo.at/count.js"></script>
@@ -165,7 +165,7 @@ const TOUR_CONTENT = {
     },
     4: {
       title: "Львів містичний",
-      desc: "Підземна річка під Оперним, алхімічний будинок на Ринку, Базиліск Вірменської і кат, якого боялись навіть мерці. 8 зупинок — темна сторона Львова."
+      desc: "Підземна річка під Оперним, алхімічний будинок на Ринку, Василіск Вірменської і кат, якого боялись навіть мерці. 12 зупинок — темна сторона Львова."
     },
     5: {
       title: "Різдвяний Львів",
@@ -173,7 +173,7 @@ const TOUR_CONTENT = {
     },
     6: {
       title: "Історія Львова",
-      desc: "Від Високого замку до проспекту Свободи. 8 зупинок крізь ключові місця та події семивікової столиці Галичини."
+      desc: "Від Високого замку до проспекту Свободи. 12 зупинок крізь ключові місця та події семивікової столиці Галичини."
     },
     7: {
       title: "Ужгород: від замку до набережної",
@@ -211,7 +211,7 @@ const TOUR_CONTENT = {
     },
     4: {
       title: "Mystical Lviv",
-      desc: "An underground river beneath the Opera, an alchemist's house on Market Square, the Armenian Street Basilisk and an executioner feared by the dead. 8 stops — Lviv's dark side."
+      desc: "An underground river beneath the Opera, an alchemist's house on Market Square, the Armenian Street Basilisk and an executioner feared by the dead. 12 stops — Lviv's dark side."
     },
     5: {
       title: "Christmas Lviv",
@@ -219,7 +219,7 @@ const TOUR_CONTENT = {
     },
     6: {
       title: "History of Lviv",
-      desc: "From High Castle to Freedom Avenue. 8 stops through the key places and events of a seven-century Galician capital."
+      desc: "From High Castle to Freedom Avenue. 12 stops through the key places and events of a seven-century Galician capital."
     },
     7: {
       title: "Uzhhorod: Castle to Embankment",
@@ -709,6 +709,201 @@ const CITIES = [{
   cover: "img/69.jpg"
 }];
 const FREE_SECONDS = 60;
+const TOUR_ROUTES = {
+  4: [{
+    n: "Оперний театр",
+    q: "Львівська національна опера, проспект Свободи 28, Львів"
+  }, {
+    n: "Гарнізонний храм",
+    q: "Гарнізонний храм святих апостолів Петра і Павла, Театральна 11, Львів"
+  }, {
+    n: "Каплиця Боїмів",
+    q: "Каплиця Боїмів, Катедральна площа 1, Львів"
+  }, {
+    n: "Площа Ринок",
+    q: "Ратуша, площа Ринок 1, Львів"
+  }, {
+    n: "Чорна кам'яниця",
+    q: "Чорна кам'яниця, площа Ринок 4, Львів"
+  }, {
+    n: "Вірменська вулиця",
+    q: "Вірменський собор, Вірменська 7, Львів"
+  }, {
+    n: "Домініканський собор",
+    q: "Домініканський собор, Музейна площа 1, Львів"
+  }, {
+    n: "Аптека «Під чорним орлом»",
+    q: "Аптека-музей, Друкарська 2, Львів"
+  }, {
+    n: "Вулиця Підвальна",
+    q: "Міський арсенал, Підвальна 5, Львів"
+  }, {
+    n: "Бернардинський монастир",
+    q: "Бернардинський монастир, Соборна площа 3А, Львів"
+  }, {
+    n: "Митна площа",
+    q: "Митна площа, Львів"
+  }, {
+    n: "Високий замок",
+    q: "Високий замок, Львів"
+  }],
+  6: [{
+    n: "Високий замок",
+    q: "Високий замок, Львів"
+  }, {
+    n: "Церква святого Миколая",
+    q: "Церква святого Миколая, Богдана Хмельницького 28, Львів"
+  }, {
+    n: "Площа Старий Ринок",
+    q: "Площа Старий Ринок, Львів"
+  }, {
+    n: "Вірменська вулиця",
+    q: "Вірменський собор, Вірменська 7, Львів"
+  }, {
+    n: "Площа Ринок і Ратуша",
+    q: "Ратуша, площа Ринок 1, Львів"
+  }, {
+    n: "Чорна кам'яниця та Італійський дворик",
+    q: "Чорна кам'яниця, площа Ринок 4, Львів"
+  }, {
+    n: "Латинський собор і каплиця Боїмів",
+    q: "Латинський кафедральний собор, Катедральна площа 1, Львів"
+  }, {
+    n: "Руська вулиця, вежа Корнякта",
+    q: "Успенська церква, Руська 7, Львів"
+  }, {
+    n: "«Золота Роза»",
+    q: "Синагога Золота Роза, Староєврейська, Львів"
+  }, {
+    n: "Порохова вежа, Арсенал, Бернардинці",
+    q: "Порохова вежа, Підвальна 4, Львів"
+  }, {
+    n: "Площа Міцкевича",
+    q: "49.83966,24.02986"
+  }, {
+    n: "Проспект Свободи й Оперний театр",
+    q: "Львівська національна опера, проспект Свободи 28, Львів"
+  }]
+};
+function mapsRouteUrl(pts) {
+  const e = encodeURIComponent;
+  const wp = pts.slice(1, -1).map(p => p.q).join("|");
+  return "https://www.google.com/maps/dir/?api=1&travelmode=walking&origin=" + e(pts[0].q) + "&destination=" + e(pts[pts.length - 1].q) + (wp ? "&waypoints=" + e(wp) : "");
+}
+function mapsPlaceUrl(p) {
+  return "https://www.google.com/maps/dir/?api=1&travelmode=walking&destination=" + encodeURIComponent(p.q);
+}
+function RouteCard({
+  tourId,
+  color
+}) {
+  const pts = TOUR_ROUTES[tourId];
+  const [open, setOpen] = React.useState(false);
+  if (!pts) return null;
+  const parts = [];
+  for (let i = 0; i < pts.length - 1; i += 4) {
+    parts.push([i, Math.min(i + 4, pts.length - 1)]);
+  }
+  return React.createElement("div", {
+    style: {
+      background: "#fff",
+      borderRadius: 18,
+      padding: "14px 14px 10px",
+      margin: "0 0 14px",
+      boxShadow: "0 2px 12px rgba(0,0,0,.06)"
+    }
+  }, React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 10
+    }
+  }, React.createElement("div", {
+    style: {
+      fontWeight: 700,
+      fontSize: 16
+    }
+  }, "\uD83D\uDDFA \u041C\u0430\u0440\u0448\u0440\u0443\u0442 \xB7 ", pts.length, " \u0437\u0443\u043F\u0438\u043D\u043E\u043A"), React.createElement("button", {
+    onClick: () => setOpen(o => !o),
+    style: {
+      background: "none",
+      border: "none",
+      color: color,
+      fontWeight: 600,
+      fontSize: 14,
+      cursor: "pointer"
+    }
+  }, open ? "Згорнути" : "Усі зупинки")), React.createElement("div", {
+    style: {
+      display: "flex",
+      flexWrap: "wrap",
+      gap: 8,
+      marginBottom: open ? 8 : 4
+    }
+  }, parts.map(([a, b], k) => React.createElement("a", {
+    key: k,
+    href: mapsRouteUrl(pts.slice(a, b + 1)),
+    target: "_blank",
+    rel: "noopener",
+    onClick: () => track("marshrut/" + tourId, "Відкрили маршрут: " + tourTitle(tourId)),
+    style: {
+      flex: "1 1 auto",
+      textAlign: "center",
+      textDecoration: "none",
+      color: "#fff",
+      background: color,
+      borderRadius: 12,
+      padding: "10px 8px",
+      fontSize: 14,
+      fontWeight: 600
+    }
+  }, "\u0417\u0443\u043F\u0438\u043D\u043A\u0438 ", a + 1, "\u2013", b + 1, " \u2197"))), React.createElement("div", {
+    style: {
+      color: "#999",
+      fontSize: 12,
+      marginBottom: open ? 6 : 2
+    }
+  }, "\u0412\u0456\u0434\u043A\u0440\u0438\u0432\u0430\u0454\u0442\u044C\u0441\u044F \u0432 Google Maps \u0437 \u043F\u0456\u0448\u043E\u0445\u0456\u0434\u043D\u0438\u043C \u043C\u0430\u0440\u0448\u0440\u0443\u0442\u043E\u043C"), open && pts.map((p, i) => React.createElement("a", {
+    key: i,
+    href: mapsPlaceUrl(p),
+    target: "_blank",
+    rel: "noopener",
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 12,
+      padding: "9px 2px",
+      borderTop: "1px solid #f0f0f3",
+      textDecoration: "none",
+      color: "#1d2433"
+    }
+  }, React.createElement("span", {
+    style: {
+      width: 26,
+      height: 26,
+      borderRadius: "50%",
+      background: color,
+      color: "#fff",
+      fontSize: 13,
+      fontWeight: 700,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      flexShrink: 0
+    }
+  }, i + 1), React.createElement("span", {
+    style: {
+      flex: 1,
+      fontSize: 15
+    }
+  }, p.n), React.createElement("span", {
+    style: {
+      color: "#bbb",
+      fontSize: 13
+    }
+  }, "\u044F\u043A \u0434\u0456\u0439\u0442\u0438 \u2197"))));
+}
 const _gcQueue = [];
 function track(path, title) {
   const send = () => {
@@ -1584,7 +1779,10 @@ function PlayerScreen({
       lineHeight: 1.6,
       margin: "0 0 14px"
     }
-  }, content.desc), !purchased && React.createElement("div", {
+  }, content.desc), React.createElement(RouteCard, {
+    tourId: tour.id,
+    color: tour.color[1]
+  }), !purchased && React.createElement("div", {
     style: {
       background: "#fff8f0",
       border: "1px solid #fddcb5",
