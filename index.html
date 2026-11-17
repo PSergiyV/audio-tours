@@ -628,14 +628,14 @@ const TOURS_BASE = [{
 }, {
   id: 6,
   city: "Львів",
-  category: "Архітектура",
+  category: "Історія",
   duration: 2597,
   price: 99,
   rating: 4.8,
   reviews: 381,
   color: ["#4a3000", "#b7770d"],
   icon: "🏰",
-  cover: "img/65.jpg"
+  cover: "img/12.jpg"
 }, {
   id: 9,
   city: "Київ",
@@ -1960,11 +1960,14 @@ function CityToursScreen({
   }, React.createElement("div", {
     style: {
       background: `linear-gradient(135deg,${city.color[0]},${city.color[1]})`,
-      padding: "10px 16px 12px",
+      padding: "10px 16px 44px",
       flexShrink: 0,
-      display: "flex",
-      alignItems: "center",
-      gap: 10
+      position: "relative",
+      textAlign: "center"
+    }
+  }, React.createElement("div", {
+    style: {
+      textAlign: "left"
     }
   }, React.createElement("button", {
     onClick: onBack,
@@ -1975,36 +1978,43 @@ function CityToursScreen({
       borderRadius: 20,
       padding: "6px 14px",
       cursor: "pointer",
-      fontSize: 14,
-      flexShrink: 0
+      fontSize: 14
     }
-  }, tr(lang, "back")), React.createElement("span", {
-    style: {
-      fontSize: 26
-    }
-  }, city.icon), React.createElement("div", {
-    style: {
-      flex: 1,
-      minWidth: 0
-    }
-  }, React.createElement("div", {
+  }, tr(lang, "back"))), React.createElement("div", {
     style: {
       color: "#fff",
-      fontSize: 17,
-      fontWeight: 700,
-      lineHeight: 1.2
+      fontSize: 32,
+      fontWeight: 800,
+      textTransform: "uppercase",
+      letterSpacing: 3,
+      lineHeight: 1.1,
+      marginTop: 8
     }
   }, CITY_NAMES[lang][city.key]), React.createElement("div", {
     style: {
-      color: "rgba(255,255,255,.7)",
-      fontSize: 12
+      width: 44,
+      height: 3,
+      borderRadius: 2,
+      background: "rgba(255,255,255,.55)",
+      margin: "10px auto 8px"
     }
-  }, tours.length, " ", tr(lang, "toursAvail")))), React.createElement("div", {
+  }), React.createElement("div", {
+    style: {
+      color: "rgba(255,255,255,.85)",
+      fontSize: 15,
+      fontWeight: 500
+    }
+  }, tours.length, " ", tr(lang, "toursAvail"))), React.createElement("div", {
     style: {
       flex: 1,
       overflowY: "auto",
-      padding: "16px 16px 80px",
-      background: "#f7f7f9"
+      padding: "20px 16px 80px",
+      background: "#f7f7f9",
+      borderRadius: "26px 26px 0 0",
+      marginTop: -24,
+      position: "relative",
+      zIndex: 1,
+      boxShadow: "0 -6px 18px rgba(0,0,0,.10)"
     }
   }, tours.map(tour => {
     const content = TOUR_CONTENT[lang][tour.id];
@@ -2071,7 +2081,10 @@ function CityToursScreen({
     }, React.createElement("span", {
       style: {
         fontSize: 12,
-        color: "#888"
+        color: tour.color[1],
+        fontWeight: 700,
+        textTransform: "uppercase",
+        letterSpacing: .8
       }
     }, tour.category), React.createElement("span", {
       style: {
@@ -2086,16 +2099,18 @@ function CityToursScreen({
       }
     }, " ", tr(lang, "yours")))), React.createElement("div", {
       style: {
-        fontWeight: 700,
-        fontSize: 15,
-        marginBottom: 3
+        fontWeight: 800,
+        fontSize: 21,
+        lineHeight: 1.2,
+        marginBottom: 5,
+        color: "#1a1a2e"
       }
     }, content.title), React.createElement("div", {
       style: {
-        color: "#888",
-        fontSize: 13,
-        lineHeight: 1.4,
-        marginBottom: 8
+        color: "#777",
+        fontSize: 14.5,
+        lineHeight: 1.45,
+        marginBottom: 10
       }
     }, content.desc), React.createElement("div", {
       style: {
@@ -2272,33 +2287,45 @@ function CitiesScreen({
   }, React.createElement("div", {
     style: {
       background: "linear-gradient(135deg,#1a2f4a,#2d6a9f)",
-      padding: "18px 20px 14px",
-      flexShrink: 0
+      padding: "22px 20px 46px",
+      flexShrink: 0,
+      textAlign: "center"
     }
   }, React.createElement("div", {
     style: {
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      marginBottom: 6
+      fontWeight: 800,
+      fontSize: 30,
+      color: "#fff",
+      textTransform: "uppercase",
+      letterSpacing: 2.5,
+      lineHeight: 1.1
     }
-  }, React.createElement("div", {
+  }, tr(lang, "appTitle")), React.createElement("div", {
     style: {
-      fontWeight: 700,
-      fontSize: 22,
-      color: "#fff"
+      width: 44,
+      height: 3,
+      borderRadius: 2,
+      background: "rgba(255,255,255,.55)",
+      margin: "12px auto 10px"
     }
-  }, tr(lang, "appTitle"))), React.createElement("div", {
+  }), React.createElement("div", {
     style: {
-      color: "rgba(255,255,255,.75)",
-      fontSize: 14,
-      paddingBottom: 4
+      color: "rgba(255,255,255,.85)",
+      fontSize: 17,
+      fontWeight: 500,
+      letterSpacing: .5
     }
   }, tr(lang, "chooseCity"))), React.createElement("div", {
     style: {
       flex: 1,
       overflowY: "auto",
-      padding: "16px 16px 80px"
+      padding: "20px 16px 80px",
+      background: "#f7f7f9",
+      borderRadius: "26px 26px 0 0",
+      marginTop: -24,
+      position: "relative",
+      zIndex: 1,
+      boxShadow: "0 -6px 18px rgba(0,0,0,.10)"
     }
   }, CITIES.map(city => React.createElement("div", {
     key: city.key,
