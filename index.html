@@ -3857,7 +3857,9 @@ function DesktopSite({
   selectedTour,
   selectedCity,
   screen,
-  setScreen
+  setScreen,
+  onBackFromTour,
+  onBackToCities
 }) {
   const refs = {
     tours: React.useRef(null),
@@ -3891,9 +3893,7 @@ function DesktopSite({
       }), 60);
     }
   }, [screen]);
-  const backFromTour = () => {
-    setScreen(selectedCity ? "city-tours" : "cities");
-  };
+  const backFromTour = onBackFromTour;
   const showCity = (screen === "city-tours" || screen === "coming-soon") && selectedCity;
   return React.createElement("div", {
     style: {
@@ -3916,7 +3916,7 @@ function DesktopSite({
     city: selectedCity,
     purchased: purchased,
     onOpenTour: onOpenTour,
-    onBack: goHome
+    onBack: onBackToCities
   }) : React.createElement(DHome, {
     purchased: purchased,
     onOpenTour: onOpenTour,
@@ -3947,6 +3947,57 @@ function DesktopSite({
     lang: lang,
     onBack: backFromTour
   }))));
+}
+const CITY_SLUG = {
+  "Львів": "lviv",
+  "Київ": "kyiv",
+  "Одеса": "odesa"
+};
+function screenDepth(scr) {
+  return scr === "detail" || scr === "coming-soon" ? 2 : scr === "city-tours" || scr === "contact" || scr === "profile" ? 1 : 0;
+}
+function hashFor(scr, city, tour) {
+  if ((scr === "detail" || scr === "coming-soon") && tour) {
+    const c = CITY_SLUG[tour.city] || "t";
+    return "#" + c + "/" + tour.id;
+  }
+  if (scr === "city-tours" && city) return "#" + (CITY_SLUG[city.key] || "");
+  if (scr === "contact") return "#contact";
+  if (scr === "profile") return "#profile";
+  return "";
+}
+function parseHash(h) {
+  const parts = (h || "").replace(/^#\/?/, "").split("/").filter(Boolean);
+  const slugToCity = sl => CITIES.find(c => CITY_SLUG[c.key] === sl) || null;
+  if (parts[0] === "contact") return {
+    scr: "contact",
+    city: null,
+    tour: null
+  };
+  if (parts[0] === "profile") return {
+    scr: "profile",
+    city: null,
+    tour: null
+  };
+  const city = parts[0] ? slugToCity(parts[0]) : null;
+  if (city && parts[1]) {
+    const t = TOURS_BASE.find(x => String(x.id) === parts[1] && x.city === city.key);
+    if (t) return {
+      scr: t.comingSoon ? "coming-soon" : "detail",
+      city,
+      tour: t
+    };
+  }
+  if (city) return {
+    scr: "city-tours",
+    city,
+    tour: null
+  };
+  return {
+    scr: "cities",
+    city: null,
+    tour: null
+  };
 }
 function App() {
   const [lang, setLang] = useState("uk");
@@ -4022,9 +4073,48 @@ function App() {
       return n;
     });
   }
-  function goBackFromPlayer() {
-    setScreen(selectedCity ? "city-tours" : "cities");
+  function goUp(fallback) {
+    if (window.history.state && window.history.state.d > 0) {
+      window.history.back();
+    } else fallback();
   }
+  function goBackFromPlayer() {
+    goUp(() => setScreen(selectedCity ? "city-tours" : "cities"));
+  }
+  function goToCities() {
+    goUp(() => {
+      setScreen("cities");
+      setSelectedCity(null);
+    });
+  }
+  React.useEffect(() => {
+    function apply() {
+      const {
+        scr,
+        city,
+        tour
+      } = parseHash(window.location.hash);
+      setSelectedCity(city);
+      setSelectedTour(tour);
+      setScreen(scr);
+    }
+    apply();
+    window.addEventListener("popstate", apply);
+    return () => window.removeEventListener("popstate", apply);
+  }, []);
+  React.useEffect(() => {
+    const h = hashFor(screen, selectedCity, selectedTour);
+    const cur = window.location.hash || "";
+    if (cur === h || h === "" && cur === "#") return;
+    const nd = screenDepth(screen),
+      od = window.history.state && window.history.state.d || 0;
+    const url = h || window.location.pathname + window.location.search;
+    if (nd > od) window.history.pushState({
+      d: nd
+    }, "", url);else window.history.replaceState({
+      d: nd
+    }, "", url);
+  }, [screen, selectedCity, selectedTour]);
   const statusDark = (screen === "detail" || screen === "coming-soon") && selectedTour;
   const statusCity = screen === "city-tours" && selectedCity;
   const statusBg = statusDark ? `linear-gradient(135deg,${selectedTour.color[0]},${selectedTour.color[1]})` : "#f7f7f9";
@@ -4046,7 +4136,9 @@ function App() {
       selectedTour: selectedTour,
       selectedCity: selectedCity,
       screen: screen,
-      setScreen: setScreen
+      setScreen: setScreen,
+      onBackFromTour: goBackFromPlayer,
+      onBackToCities: goToCities
     });
   }
   return React.createElement("div", {
@@ -4083,10 +4175,7 @@ function App() {
     ratings: userRatings,
     lang: lang,
     onSelectTour: openTour,
-    onBack: () => {
-      setScreen("cities");
-      setSelectedCity(null);
-    }
+    onBack: goToCities
   }) : screen === "contact" ? React.createElement(ContactScreen, null) : screen === "profile" ? React.createElement(ProfileScreen, {
     purchased: purchased,
     ratings: userRatings,
